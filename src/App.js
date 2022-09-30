@@ -1,14 +1,21 @@
 import { useEffect, useState } from 'react';
 
 function App() {
-  const [loading, isLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [movies, setMovies] = useState([]);
+
   useEffect(() => {
     fetch(
-      ` http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.xml`
+      `http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=f5eef3421c602c6cb7ea224104795888&targetDt=20120101`
     )
       .then((response) => response.json())
-      .then((json) => console.log(json));
+      .then((json) => {
+        setMovies(json.boxOfficeResult.dailyBoxOfficeList);
+        setLoading(false);
+      });
   }, []);
+
+  console.log('데이터', movies);
 
   return <div>{loading ? <h2>Loading...</h2> : null}</div>;
 }
